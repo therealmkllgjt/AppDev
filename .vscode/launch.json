@@ -11,10 +11,20 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\src\\app\\dashboard\\page.jsx",
+            "program": "${workspaceFolder}/app/dashboard/page.jsx",  //Corrected path - assuming page.jsx is at this location
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Next.js: debug",
+            "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+            "args": ["dev"],
+            "runtimeArgs": ["--inspect"],
+            "autoAttachChildProcesses": true,
+            "port": 9229
         }
     ]
 }
