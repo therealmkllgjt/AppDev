@@ -1,4 +1,4 @@
-'use client'; // If using app directory
+'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -8,9 +8,12 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true
+    setError(''); // Clear previous errors
 
     try {
       const res = await fetch('https://jsonplaceholder.typicode.com/users');
@@ -21,46 +24,24 @@ export default function LoginPage() {
       );
 
       if (user) {
-        // Save to localStorage
         localStorage.setItem('user', JSON.stringify(user));
-        // Redirect
         router.push('/dashboard');
       } else {
         setError('Invalid email or password.');
       }
     } catch (err) {
-      setError('Something went wrong.');
+      setError('Something went wrong. Please try again later.');
+    } finally {
+      setLoading(false); // Set loading to false after the request completes
     }
   };
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 shadow-lg rounded-xl bg-white">
-      <h1 className="text-xl font-bold mb-4">Login</h1>
-      {error && <p className="text-red-500 mb-2">{error}</p>}
-      <form onSubmit={handleLogin} className="space-y-4">
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full border p-2 rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password (your username)"
-          className="w-full border p-2 rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-        >
-          Login
-        </button>
-      </form>
+      {/* ... (rest of your login form code) ... */}
+      <button type="submit" disabled={loading} className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+        {loading ? 'Logging in...' : 'Login'}
+      </button>
     </div>
   );
 }
